@@ -76,7 +76,8 @@ year_summary <-
     total_weight_tons = sum(weight_tons), 
     average_weight_tons = mean(weight_tons), 
     total_volume_cubic_yards = sum(volume_cubic_yards),
-    average_volume_cubic_yards = mean(volume_cubic_yards))
+    average_volume_cubic_yards = mean(volume_cubic_yards)
+  )
 
 median_sport_balls_2017 <- 
   trashwheel_df %>% 
@@ -124,6 +125,27 @@ variables in the combination of `2018 precipitation` and `2019 precipitation`.
 The variables include: ``r colnames(precipitation_all_df)``.Some examples of key variables as 
 `r knitr::kable(some_example_precipitation)`. The month with most precipitation is `r max_precipitation` and the month with least precipitation is `r min_precipitation`. The total precipitation in 2018 is `r sum_precipitation_2018`inches. The total precipitation in 2019 is `r sum_precipitation_2019`inches.
 
+## Problem 2 
+
+import and clean data in `pols-month.csv`
+
+```{r, message = FALSE}
+pols_df <- 
+  read_csv("data/pols-month.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(
+    mon, 
+    into = c("year", "month", "day"), 
+    sep = "-", 
+    convert = TRUE
+  ) %>% 
+  mutate(
+    month = month.name[month],
+    president = ifelse(prez_dem == 1, "dem", "gop")
+  ) %>% 
+  select(-prez_dem, -prez_gop, -day)
+  
+```
 
 
 
