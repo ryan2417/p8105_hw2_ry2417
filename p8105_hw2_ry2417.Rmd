@@ -62,7 +62,8 @@ precipitation_all_df <-
 ```
 
 
-describe these two data sets 
+describe these two data sets
+
 ```{r summary_tables_trashwheel}
 some_example_trashwheel <- 
   trashwheel_df %>% 
@@ -115,15 +116,26 @@ sum_precipitation_2019 <-
 ```
 
 There are `r nrow(trashwheel_df)` observations and `r ncol(trashwheel_df)` 
-variables in `Mr.Trash Wheel`. The variables include: ``r colnames(trashwheel_df)``. Some examples of key variables as 
+variables in `Mr.Trash Wheel`. The variables include: ``r colnames(trashwheel_df)``. 
+Some examples of key variables as 
 `r knitr::kable(some_example_trashwheel)`. The year of the data is ranging from 
 `r trashwheel_df %>% pull(year) %>% min()` to 
-`r trashwheel_df %>% pull(year) %>% max()`. The total number of cigarette butts are $`r trashwheel_df %>% pull(cigarette_butts) %>% sum()`$; the total of glass bottles are $`r trashwheel_df %>% pull(glass_bottles) %>% sum()`$; the total of plastic bottles are $`r trashwheel_df %>% pull(plastic_bottles) %>% sum()`$. The total and average weight and volume of each year are `r  knitr::kable(year_summary)`. 
-The median number of sports balls in a dumpster in 2017 is `r median_sport_balls_2017`. 2018 has most trash and 2019 has least trash.\
+`r trashwheel_df %>% pull(year) %>% max()`. The total number of cigarette butts 
+are $`r trashwheel_df %>% pull(cigarette_butts) %>% sum()`$; the total of glass 
+bottles are $`r trashwheel_df %>% pull(glass_bottles) %>% sum()`$; the total of 
+plastic bottles are $`r trashwheel_df %>% pull(plastic_bottles) %>% sum()`$. 
+The total and average weight and volume of each year are 
+`r  knitr::kable(year_summary)`. 
+The median number of sports balls in a dumpster in 2017 is 
+`r median_sport_balls_2017`. 2018 has most trash and 2019 has least trash.\
 There are `r nrow(precipitation_all_df)` observations and `r ncol(precipitation_all_df)` 
 variables in the combination of `2018 precipitation` and `2019 precipitation`. 
-The variables include: ``r colnames(precipitation_all_df)``.Some examples of key variables as 
-`r knitr::kable(some_example_precipitation)`. The month with most precipitation is `r max_precipitation` and the month with least precipitation is `r min_precipitation`. The total precipitation in 2018 is `r sum_precipitation_2018`inches. The total precipitation in 2019 is `r sum_precipitation_2019`inches.
+The variables include: ``r colnames(precipitation_all_df)``.Some examples of key
+variables as `r knitr::kable(some_example_precipitation)` 
+The month with most precipitation is `r max_precipitation` and the month with 
+least precipitation is `r min_precipitation`. The total precipitation in 2018 is
+`r sum_precipitation_2018` inches. The total precipitation in 2019 is 
+`r sum_precipitation_2019` inches.
 
 ## Problem 2 
 
@@ -147,7 +159,23 @@ pols_df <-
   
 ```
 
+import and clean data in `snp.csv`
 
-
-
-
+```{r, message = FALSE}
+snp_df <- 
+  read_csv("data/snp.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(
+    date, 
+    into = c("month", "day", "year"), 
+    sep = "/", 
+    convert = TRUE
+  ) %>% 
+  mutate(
+    year = ifelse(year <= 15, year + 2000, year + 1900),
+    month = month.name[month],
+  ) %>% 
+  select(-day) %>% 
+  relocate(year, month) %>% 
+  arrange(year, month)
+```
