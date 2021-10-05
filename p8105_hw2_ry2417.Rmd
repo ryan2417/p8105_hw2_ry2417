@@ -118,19 +118,19 @@ sum_precipitation_2019 <-
 There are `r nrow(trashwheel_df)` observations and `r ncol(trashwheel_df)` 
 variables in `Mr.Trash Wheel`. The variables include: ``r colnames(trashwheel_df)``. 
 Some examples of key variables as 
-`r knitr::kable(some_example_trashwheel)`. The year of the data is ranging from 
+`r knitr::kable(some_example_trashwheel)` The year of the data is ranging from 
 `r trashwheel_df %>% pull(year) %>% min()` to 
 `r trashwheel_df %>% pull(year) %>% max()`. The total number of cigarette butts 
 are $`r trashwheel_df %>% pull(cigarette_butts) %>% sum()`$; the total of glass 
 bottles are $`r trashwheel_df %>% pull(glass_bottles) %>% sum()`$; the total of 
 plastic bottles are $`r trashwheel_df %>% pull(plastic_bottles) %>% sum()`$. 
 The total and average weight and volume of each year are 
-`r  knitr::kable(year_summary)`. 
+`r  knitr::kable(year_summary)`
 The median number of sports balls in a dumpster in 2017 is 
 `r median_sport_balls_2017`. 2018 has most trash and 2019 has least trash.\
 There are `r nrow(precipitation_all_df)` observations and `r ncol(precipitation_all_df)` 
 variables in the combination of `2018 precipitation` and `2019 precipitation`. 
-The variables include: ``r colnames(precipitation_all_df)``.Some examples of key
+The variables include: ``r colnames(precipitation_all_df)``. Some examples of key
 variables as `r knitr::kable(some_example_precipitation)` 
 The month with most precipitation is `r max_precipitation` and the month with 
 least precipitation is `r min_precipitation`. The total precipitation in 2018 is
@@ -194,7 +194,8 @@ unemployment_df <-
   janitor::clean_names()
 ```
 
-join the datasets by merging `snp` into `pols`
+join the data sets by merging `snp` into `pols`, and join the `unemployment` to 
+the result data frame.
 
 ```{r, message = FALSE}
 merging_df <-
@@ -203,3 +204,61 @@ merging_df <-
   left_join(unemployment_df, by = c("year", "month"))
 ```
 
+describe these data sets
+```{r}
+max_stock_month <-
+  merging_df %>% 
+  filter(close == max(close, na.rm = TRUE)) %>% 
+  select(month, year, president) %>% 
+  unlist()
+
+min_stock_month <-
+  merging_df %>% 
+  filter(close == min(close, na.rm = TRUE)) %>% 
+  select(month, year, president) %>% 
+  unlist()
+
+max_unemployment_month <-
+  merging_df %>% 
+  filter(percent_unemployment == max(percent_unemployment, na.rm = TRUE)) %>% 
+  select(month, year, president) %>% 
+  unlist()
+
+min_unemployment_month <-
+  merging_df %>% 
+  filter(percent_unemployment == min(percent_unemployment, na.rm = TRUE)) %>% 
+  select(month, year, president) %>% 
+  unlist()
+  
+some_example_merging <- 
+  merging_df %>% 
+  select(year, month, president, close, percent_unemployment) %>% 
+  filter(!is.na(close)) %>% 
+  head()
+```
+
+Data in `pols` has `r nrow(pols_df)` observations of `r ncol(pols_df)` variables.
+The year is ranging from `r pols_df %>% pull(year) %>% min()` to 
+`r pols_df %>% pull(year) %>% max()`.\
+Data in `snp` has `r nrow(snp_df)` observations of `r ncol(snp_df)` variables.
+The year is ranging from `r snp_df %>% pull(year) %>% min()` to 
+`r snp_df %>% pull(year) %>% max()`.\
+Data in `unemployment` has `r nrow(unemployment_df)` observations of 
+`r ncol(unemployment_df)` variables.
+The year is ranging from `r unemployment_df %>% pull(year) %>% min()` to 
+`r unemployment_df %>% pull(year) %>% max()`.\
+The result data frame has `r nrow(merging_df)` observations of 
+`r ncol(merging_df)` variables. The year is ranging from 
+`r snp_df %>% pull(year) %>% min()` to 
+`r snp_df %>% pull(year) %>% max()`.\
+The variables of merging data frame include ``r names(merging_df)``.
+Some examples of key variables are `r knitr::kable(some_example_merging)` The 
+months with highest unemployment percentage are `r max_unemployment_month[c(1,3)]` 
+and `r max_unemployment_month[c(2,4)]`, when the president was republican. The 
+months with lowest unemployment percentage is
+`r min_unemployment_month[c(1,3)]` and `r min_unemployment_month[c(2,4)]`, 
+when the president was republican. The month with 
+the highest closing values of the S&P stock  is `r max_stock_month[-3]` 
+when the president was democratic. The 
+month with the lowest closing values of the S&P stock  is `r min_stock_month[-3]` 
+when the president was republican.
