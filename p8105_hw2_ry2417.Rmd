@@ -288,3 +288,52 @@ babynames_df <-
   distinct()
 ```
 
+The table showing the rank in popularity of the name “Olivia” as a female baby 
+name over time respect to different ethnicity
+
+```{r, message = FALSE}
+babynames_df %>% 
+  filter(childs_first_name == "Olivia", gender == "female") %>% 
+  select(rank, year_of_birth, ethnicity) %>%
+  arrange(year_of_birth) %>%
+  pivot_wider(
+    names_from = year_of_birth,
+    values_from = rank
+  ) %>% 
+  knitr::kable()
+```
+
+The table showing the most popular name among male children over time respect to
+different ethnicity
+
+```{r}
+babynames_df %>% 
+  filter(gender == "male", rank == 1) %>% 
+  select(childs_first_name, year_of_birth, ethnicity) %>% 
+  arrange(year_of_birth) %>% 
+  pivot_wider(
+    names_from = (year_of_birth),
+    values_from = childs_first_name
+  ) %>% 
+  knitr::kable()
+```
+
+Create a scatter plot showing the number of children with a name (y axis) 
+against the rank in popularity of that name (x axis) for white non-hispanic male 
+children born in 2016 
+
+```{r male_name_2016_scatterplot, fig.width = 6, fig.height = 6}
+babynames_df %>% 
+  filter(
+    gender == "male", 
+    year_of_birth == 2016,
+    ethnicity == "White Non Hispanic"
+  ) %>% 
+  select(count, rank) %>% 
+  ggplot(aes(x = rank, y = count)) + 
+  geom_point() +
+  labs(
+    x = "rank of the name in 2016", 
+    y = "the number of children with the name in 2016"
+  )
+```
