@@ -262,3 +262,29 @@ the highest closing values of the S&P stock  is `r max_stock_month[-3]`
 when the president was democratic. The 
 month with the lowest closing values of the S&P stock  is `r min_stock_month[-3]` 
 when the president was republican.
+
+## Problem 3
+
+import and clean data in `Popular_Baby_Names`.
+
+```{r, message = FALSE}
+babynames_df <- 
+  read_csv("data/Popular_Baby_Names.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    gender = str_to_lower(gender),  
+    ethnicity = str_to_title(ethnicity),
+    childs_first_name = str_to_title(childs_first_name)
+  ) %>% 
+  mutate(
+    ethnicity = 
+      recode(
+      ethnicity,
+      "Black Non Hisp" = "Black Non Hispanic", 
+      "White Non Hisp" = "White Non Hispanic",
+      "Asian And Paci" = "Asian And Pacific Islander"
+    )
+  ) %>% 
+  distinct()
+```
+
