@@ -80,9 +80,9 @@ year_summary <-
     average_volume_cubic_yards = mean(volume_cubic_yards)
   )
 
-median_sport_balls_2017 <- 
+median_sport_balls_2019 <- 
   trashwheel_df %>% 
-  filter(year == 2017) %>% 
+  filter(year == 2019) %>% 
   pull(sports_balls) %>% 
   median()
 
@@ -126,8 +126,8 @@ bottles are $`r trashwheel_df %>% pull(glass_bottles) %>% sum()`$; the total of
 plastic bottles are $`r trashwheel_df %>% pull(plastic_bottles) %>% sum()`$. 
 The total and average weight and volume of each year are 
 `r  knitr::kable(year_summary)`
-The median number of sports balls in a dumpster in 2017 is 
-`r median_sport_balls_2017`. 2018 has most trash and 2019 has least trash.\
+The median number of sports balls in the dumpster in 2019 is 
+`r median_sport_balls_2019`. 2018 has most trash and 2019 has least trash.\
 There are `r nrow(precipitation_all_df)` observations and `r ncol(precipitation_all_df)` 
 variables in the combination of `2018 precipitation` and `2019 precipitation`. 
 The variables include: ``r colnames(precipitation_all_df)``. Some examples of key
